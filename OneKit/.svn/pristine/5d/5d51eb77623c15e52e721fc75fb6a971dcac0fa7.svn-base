@@ -1,0 +1,19 @@
+package com.cn21.onekit.android;
+
+import android.app.Application;
+
+import com.cn21.onekit.core.OneKitManager;
+
+/**
+ * Created by lecykx on 2017/7/17.
+ */
+
+public class MyApplication extends Application {
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        OneKitManager.getInstance().init(this);
+    }
+}

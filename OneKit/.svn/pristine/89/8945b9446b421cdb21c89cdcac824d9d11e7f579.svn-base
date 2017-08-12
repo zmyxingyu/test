@@ -1,0 +1,196 @@
+package com.cn21.onekit.lib.utils;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.text.TextUtils;
+
+import java.util.Map;
+
+
+/**
+ * 默认的SharedPreferences
+ * 支持数据类型存储
+ * 位置 packagename.xml Created by xuxd on 2017/4/8.
+ */
+public final class DefaultShared {
+
+    private static final String SHAREDPREF_NAME = "SHAREDPREF_ONEKIT_SDK";
+
+    private static SharedPreferences getSpf(Context context) {
+        return context.getSharedPreferences(SHAREDPREF_NAME, Context.MODE_PRIVATE);
+    }
+
+    public static void putBoolean(Context context, String key, boolean value) {
+        if (null != context && !TextUtils.isEmpty(key)) {
+            try {
+                getSpf(context).edit().putBoolean(key, value).commit();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void remove(Context context, String key) {
+        if (null != context && !TextUtils.isEmpty(key)) {
+            try {
+                getSpf(context).edit().remove(key).commit();
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void putFloat(Context context, String key, float value) {
+        if (null != context && !TextUtils.isEmpty(key)) {
+            try {
+                getSpf(context).edit().putFloat(key, value).commit();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void putInt(Context context, String key, int value) {
+        if (null != context && !TextUtils.isEmpty(key)) {
+            try {
+                getSpf(context).edit().putInt(key, value).commit();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void putLong(Context context, String key, long value) {
+        if (null != context && !TextUtils.isEmpty(key)) {
+            try {
+                getSpf(context).edit().putLong(key, value).commit();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void putString(Context context, String key, String value) {
+        if (null != context && !TextUtils.isEmpty(key)) {
+            try {
+                getSpf(context).edit().putString(key, value).commit();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * SharedPreferences支持数据类型
+     *
+     * @param params
+     */
+    public static void putMap(Context context, Map<String, ?> params) {
+       try{
+           if (null != context || params == null || params.size() == 0)
+               return;
+           Editor edit = getSpf(context).edit();
+           for (Map.Entry<String, ?> entry : params.entrySet()) {
+               if (entry.getValue() instanceof Boolean) {
+                   edit.putBoolean(entry.getKey(), (Boolean) entry.getValue());
+               } else if (entry.getValue() instanceof Float) {
+                   edit.putFloat(entry.getKey(), (Float) entry.getValue());
+               } else if (entry.getValue() instanceof Integer) {
+                   edit.putInt(entry.getKey(), (Integer) entry.getValue());
+               } else if (entry.getValue() instanceof Long) {
+                   edit.putLong(entry.getKey(), (Long) entry.getValue());
+               } else if (entry.getValue() instanceof String) {
+                   edit.putString(entry.getKey(), (String) entry.getValue());
+               }
+           }
+           edit.commit();
+       }catch (Exception e){
+           e.printStackTrace();
+       }
+    }
+
+    public static boolean getBoolean(Context context, String key, boolean defValue) {
+        if (null != context && !TextUtils.isEmpty(key)) {
+            try {
+                return getSpf(context).getBoolean(key, defValue);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return defValue;
+
+    }
+
+    public static float getFloat(Context context, String key, float defValue) {
+        if (null != context && !TextUtils.isEmpty(key)) {
+            try {
+                return getSpf(context).getFloat(key, defValue);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return defValue;
+
+    }
+
+    public static int getInt(Context context, String key, int defValue) {
+        if (null != context && !TextUtils.isEmpty(key)) {
+            try {
+                return getSpf(context).getInt(key, defValue);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return defValue;
+    }
+
+    public static long getLong(Context context, String key, long defValue) {
+        if (null != context && !TextUtils.isEmpty(key)) {
+            try {
+                return getSpf(context).getLong(key, defValue);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return defValue;
+
+    }
+
+    public static String getString(Context context, String key, String defValue) {
+        if (null != context && !TextUtils.isEmpty(key)) {
+            try {
+                return getSpf(context).getString(key, defValue);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return defValue;
+
+    }
+
+
+    public static boolean isContainKey(Context context, String key) {
+        if (null != context && !TextUtils.isEmpty(key)) {
+            try {
+                return getSpf(context).contains(key);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public static boolean putUpdateLong(Context context, String key, long value) {
+        if (null != context && !TextUtils.isEmpty(key)) {
+            try {
+                Editor editor = getSpf(context).edit();
+                editor.putLong(key, value);
+                return editor.commit();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+}

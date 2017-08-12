@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "E:\\StudioWork\\OneKit\\xwalk_shared_library\\build\\intermediates\\res\\merged\\androidTest\\debug\\raw\\wifidirect_api.js",
+        "source": "E:\\StudioWork\\OneKit\\xwalk_shared_library\\build\\intermediates\\bundles\\debug\\res\\raw\\wifidirect_api.js"
+    },
+    {
+        "merged": "E:\\StudioWork\\OneKit\\xwalk_shared_library\\build\\intermediates\\res\\merged\\androidTest\\debug\\raw\\empty.wav",
+        "source": "E:\\StudioWork\\OneKit\\xwalk_shared_library\\build\\intermediates\\bundles\\debug\\res\\raw\\empty.wav"
+    },
+    {
+        "merged": "E:\\StudioWork\\OneKit\\xwalk_shared_library\\build\\intermediates\\res\\merged\\androidTest\\debug\\raw\\launch_screen_api.js",
+        "source": "E:\\StudioWork\\OneKit\\xwalk_shared_library\\build\\intermediates\\bundles\\debug\\res\\raw\\launch_screen_api.js"
+    }
+]

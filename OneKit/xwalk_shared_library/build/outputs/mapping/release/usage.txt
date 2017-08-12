@@ -1,0 +1,56 @@
+SevenZip.CRC
+SevenZip.Compression.LZ.BinTree
+SevenZip.Compression.LZ.InWindow
+SevenZip.Compression.LZMA.Base:
+    public static final int kNumRepDistances
+    public static final int kNumStates
+    public static final int kNumPosSlotBits
+    public static final int kDicLogSizeMin
+    public static final int kNumLenToPosStatesBits
+    public static final int kNumLenToPosStates
+    public static final int kMatchMinLen
+    public static final int kNumAlignBits
+    public static final int kAlignTableSize
+    public static final int kAlignMask
+    public static final int kStartPosModelIndex
+    public static final int kEndPosModelIndex
+    public static final int kNumPosModels
+    public static final int kNumFullDistances
+    public static final int kNumLitPosStatesBitsEncodingMax
+    public static final int kNumLitContextBitsMax
+    public static final int kNumPosStatesBitsMax
+    public static final int kNumPosStatesMax
+    public static final int kNumPosStatesBitsEncodingMax
+    public static final int kNumPosStatesEncodingMax
+    public static final int kNumLowLenBits
+    public static final int kNumMidLenBits
+    public static final int kNumHighLenBits
+    public static final int kNumLowLenSymbols
+    public static final int kNumMidLenSymbols
+    public static final int kNumLenSymbols
+    public static final int kMatchMaxLen
+    5:5:public Base()
+SevenZip.Compression.LZMA.Encoder
+SevenZip.Compression.LZMA.Encoder$LenEncoder
+SevenZip.Compression.LZMA.Encoder$LenPriceTableEncoder
+SevenZip.Compression.LZMA.Encoder$LiteralEncoder
+SevenZip.Compression.LZMA.Encoder$LiteralEncoder$Encoder2
+SevenZip.Compression.LZMA.Encoder$Optimal
+SevenZip.Compression.RangeCoder.BitTreeEncoder
+SevenZip.Compression.RangeCoder.Decoder:
+    static final int kTopMask
+    static final int kNumBitModelTotalBits
+    static final int kBitModelTotal
+    static final int kNumMoveBits
+SevenZip.Compression.RangeCoder.Encoder
+SevenZip.ICodeProgress
+SevenZip.LzmaAlone
+SevenZip.LzmaAlone$CommandLine
+SevenZip.LzmaBench
+SevenZip.LzmaBench$CBenchRandomGenerator
+SevenZip.LzmaBench$CBitRandomGenerator
+SevenZip.LzmaBench$CProgressInfo
+SevenZip.LzmaBench$CRandomGenerator
+SevenZip.LzmaBench$CrcOutStream
+SevenZip.LzmaBench$MyInputStream
+SevenZip.LzmaBench$MyOutputStream

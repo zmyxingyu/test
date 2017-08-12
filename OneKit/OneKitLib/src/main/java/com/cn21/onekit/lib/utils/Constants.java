@@ -1,0 +1,24 @@
+package com.cn21.onekit.lib.utils;
+
+/**
+ * Created by lecykx on 2017/7/18.
+ */
+
+public class Constants {
+
+
+    public static final String MANIFEST_FILE_NAME = "manifest.json"; //配置清单的文件名称
+
+    public static final String KEY_UPDATE_UNZIP_PATH = "unZipPath";  //下载的资源包解压后的路径
+    public static final String KEY_UPDATE_SOURCE_MD5_JSON = "sourceMd5Json";  //平台返回的保存每个文件的MD5txt文件中的内容
+    public static final String KEY_UPDATE_VERSION_CODE = "versionCode";  //平台最新的资源包版本号
+    public static final String KEY_UPDATE_OLD_VERSION_CODE = "lastVersionCode";  //上一个版本的资源包版本号
+    public static final String KEY_UPDATE_SUCCESS_FLAG = "key_update_success_flag";  //本地资源文件更新成功标志位
+    public static final String KEY_UPDATE_SUCCESS_TIME = "key_update_success_time";  //本地资源文件更新时间
+    public static final String KEY_START_URL = "start_url";//首页地址
+
+    public static final String KEY_CHECK_USE_XWALKVIEW_STATUS = "key_check_use_xwalkview_status";//开关状态
+    public static final String KEY_CHECK_USE_XWALKVIEW_TIME = "key_check_use_xwalkview_time";//请求开关状态时间
+
+    public static final String  KEY_RANDOM_DEVICE_ID = "key_random_device_id";
+}

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>支付</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!--360浏览器基于Webkit内核浏览-->
+    <meta name="render" content="webkit">
+    <meta name="keywords" content="网盘,云盘,天翼云盘,天翼云,免费网盘,网盘下载,云存储,个人云,手机备份,照片备份,群空间,云相册,文件同步,网盘资源,外链分享" />
+    <script>
+        ! function () {
+            var i = screen.width / 375;
+            document.write('<meta name="viewport"content="width=375,initial-scale=' + i + ",maximum-scale=" + i +
+                ", minimum-scale=" + i + ',user-scalable=no,target-densitydpi=device-dpi,minimal-ui"/>')
+        }();
+    </script>
+    <link rel="stylesheet" type="text/css" href="css/vip.css?v=2.14">
+</head>
+
+<body class="order-body">
+    <div class="theme-banner"></div>
+    <div class="user-info">
+        <div class="account">
+            <label for="">账号：</label>
+            <span class="user-account" id="J-account" style="display: inline;">叶丹波</span>
+        </div>
+        <div class="open-time">
+            <label for="">开通时长：</label>
+        </div>
+    </div>
+    <div class="packages" id="J-pakages" style="visibility: visible;">
+        <ul>
+            <li class="activity selected" data-index="0" data-real="163"><span class="time">1年</span><span class="realprice">¥&nbsp;163</span><span class="price">¥&nbsp;228</span>
+                <em
+                    class="discount-icon saletype-3"></em>
+            </li><span class="tip">首次充值：享受更低价的优惠</span>
+            <li class="activity" data-index="1" data-real="102"><span class="time">6个月</span><span class="realprice">¥&nbsp;102</span><span class="price">¥&nbsp;114</span>
+                <em
+                    class="discount-icon saletype-2"></em>
+            </li>
+            <li data-index="2" class="" data-real="57"><span class="time">3个月</span><span class="realprice">¥&nbsp;57</span><em class="discount-icon saletype-1"></em></li>
+            <li
+                data-index="3" class="" data-real="19"><span class="time">1个月</span><span class="realprice">¥&nbsp;19</span><em class="discount-icon saletype-1"></em></li>
+        </ul>
+    </div>
+
+    <div class="pay-mod animated" id="J-pay-mod">
+        <div class="pay-all">
+            <label for="">需支付：</label>
+            <span class="pay-total">163元</span>
+        </div>
+        <div class="pay-method">
+            <label for="">选择支付方式：</label>
+        </div>
+        <div class="pay-method-item bestpay">
+            <label>翼支付</label>
+            <span class="radio selected" data-bankid="EPAYACC" data-paymodeid="6"></span>
+        </div>
+        <div class="pay-method-item alipay">
+            <label>支付宝</label>
+            <span class="radio" data-bankid="ALIPAY" data-paymodeid="7"></span>
+        </div>
+        <div class="btn-blue pay-btn">
+            <a href="javascript:;" id="pay2">立即支付</a>
+        </div>
+    </div>
+    <div class="backdrop"></div>
+    <div class="total-mod">
+        <label for="">金额:</label>
+        <span class="total-box">
+			<i class="realPayMoney">163.00</i>元
+		</span>
+    </div>
+    <div class="btn-blue">
+        <a href="javascript:;" id="pay" class="">立即开通</a>
+    </div>
+    <div class="upgrade-tips">
+        <div class="tips-box">
+            <div class="tips-wap">
+                <h3>提示</h3>
+                <p></p>
+            </div>
+            <a href="javascript:;" id="btn-upgrade">马上升级</a>
+        </div>
+    </div>
+    
+    <div id="notify-mask" style="display: none;">
+        <div id="notify-container">
+            <div class="text">
+                <h1></h1>
+                <h2></h2>
+            </div><a class="close" href="javascript:;">关闭</a></div>
+    </div>
+    <script src="lib/zepto.min.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        Zepto(function ($) {
+            Order.init();
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,44 @@
+package com.cn21.onekit.lib.utils;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+
+/**
+ * Created by Administrator on 2017/7/25.
+ */
+public class SharePreferenceUtil {
+
+
+    private SharePreferenceUtil() {
+    }
+
+    public static SharedPreferences getSharePreFerence(Context cxt) {
+        return cxt.getSharedPreferences("one_kit_cn21", Context.MODE_PRIVATE);
+    }
+
+    public static void saveKeyValue(Context cxt, String key, String value) {
+        getSharePreFerence(cxt)
+                .edit()
+                .putString(key, value)
+                .commit();
+    }
+
+    public static String getString(Context cxt, String key) {
+        return getSharePreFerence(cxt)
+                .getString(key, null);
+    }
+
+    public static void removeKey(Context cxt, String key) {
+        getSharePreFerence(cxt)
+                .edit()
+                .remove(key)
+                .commit();
+    }
+
+    public static void clearAll(Context cxt) {
+        getSharePreFerence(cxt)
+                .edit()
+                .clear()
+                .commit();
+    }
+}

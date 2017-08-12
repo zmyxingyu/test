@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "E:\\StudioWork\\OneKit\\xwalk_shared_library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-v21\\button_borderless_compat.xml",
+        "source": "E:\\StudioWork\\OneKit\\xwalk_shared_library\\build\\intermediates\\bundles\\debug\\res\\drawable-v21\\button_borderless_compat.xml"
+    },
+    {
+        "merged": "E:\\StudioWork\\OneKit\\xwalk_shared_library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-v21\\button_compat.xml",
+        "source": "E:\\StudioWork\\OneKit\\xwalk_shared_library\\build\\intermediates\\bundles\\debug\\res\\drawable-v21\\button_compat.xml"
+    }
+]

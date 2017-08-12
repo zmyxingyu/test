@@ -1,0 +1,22 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 25
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled Boolean.parseBoolean(PROGUARD_LIB_IN_RELEASE as String)
+            proguardFiles '../proguard-android.txt', 'proguard-xwalk-shared-library.txt'
+        }
+    }
+}
+
+dependencies {
+    compile files('libs/xwalk_shared_library.jar')
+}

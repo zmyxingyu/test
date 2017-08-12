@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ok-jssdk-unit</title>
+</head>
+<body>
+    <p id="networktype">网络类型</p>
+    <p id="chooseimageresult">图片路径</p>
+    <button onclick="logout()">退出登录</button>
+    <img id="showimg" src="" alt="" onclick="previewImage()">
+    <button onclick="chooseImage()">选择图片</button>
+    <button onclick="hideNavigationBar()">隐藏导航</button>
+    <button onclick="showNavigationBar()">显示导航</button>
+    <button onclick="setNavigationBarTitle()">设置导航标题</button>
+    <button onclick="setNavigationBarColor()">设置红色导航颜色</button>
+    <button onclick="setViewBgColor()">设置背景颜色</button>
+    <button onclick="setScreenBrightness()">设置屏幕亮度</button>
+    <p id="screenbrightness"></p>
+    <button onclick="getScreenBrightness()">获取屏幕亮度</button>
+    <button onclick="setKeepScreenOn()">设置屏幕一直亮</button>
+    <button onclick="vibrate()">触发手机振动</button>
+    <button onclick="setClipboardData()">设置剪切板内容</button>
+    <button onclick="getClipboardData()">获取剪切板内容</button>
+    <button onclick="makePhoneCall()">拨打电话</button>
+    <button onclick="setStorage()">存储数据</button>
+    <button onclick="getStorage()">获取数据</button>
+    <button onclick="removeStorage()">删除指定缓存</button>
+    <button onclick="clearStorage()">清除缓存</button>
+
+    <button onclick="showShortToast()">短提示</button>
+    <button onclick="showLongToast()">长提示</button>
+    <button onclick="systemShare()">系统分享</button>
+    <p id="getsysinfo"></p>
+    <button onclick="getSystemInfo()">获取系统信息</button>
+    <p id="getlogininfo"></p>
+    <button onclick="getLoginInfo()">获取登录信息</button>
+    <p id="jsApi"></p>
+    <button onclick="checkJsApi()">检测JS Api</button>
+    </br>
+    <button onclick="request('GET')">GET请求</button>
+    <p id="get_req_result"></p>
+    <button onclick="request('POST')">POST请求</button>
+    <p id="post_req_result"></p>
+    <!--<button onclick="downloadFile()">下载</button>-->
+    <!--<p id="download_file_result_info"></p>-->
+    <!--<img id="downloaded_img" src="" alt="" onclick="previewDownloadedImage()">-->
+    <!--</br>-->
+    <!--<button onclick="uploadFile()">上传</button>-->
+    <!--<p id="upload_file_result_info"></p>-->
+    <button onclick="selectMobileDataToRequest()">选择数据网络</button>
+
+
+    <script src="okjsbridge.js"></script>
+    <script>
+        var downloadedImgPath;
+
+        var obj = document.getElementById('networktype');
+        obj.innerText = jsok.getNetworkType();
+        function logout(){
+            jsok.logout();
+        }
+        var obj1 = document.getElementById('showimg');
+        var imgPath = document.getElementById('chooseimageresult');
+        function chooseImage (){
+            jsok.chooseImage(3,"compressed","album",function(data){
+                obj1.src = data.path;
+                imgPath.innerText = data.path;
+            });
+        }
+        function previewImage(){
+            jsok.previewImage();
+        }
+        function previewDownloadedImage(){
+            jsok.previewDownloadedImage(downloadedImgPath);
+        }
+        function hideNavigationBar(){
+            jsok.hideNavigationBar();
+        }
+        function showNavigationBar(){
+            jsok.showNavigationBar();
+        }
+        function setNavigationBarTitle(){
+            jsok.setNavigationBarTitle('设置之后标题');
+        }
+        function setNavigationBarColor(){
+            jsok.setNavigationBarColor('red');
+        }
+        function setViewBgColor() {
+            jsok.setViewBgColor('blue')
+        }
+        function setScreenBrightness(){
+            jsok.setScreenBrightness(200);
+        }
+        function getScreenBrightness(){
+            var obj3 = document.getElementById('screenbrightness');
+            obj3.innerText = jsok.getScreenBrightness();
+        }
+        function setKeepScreenOn(){
+            jsok.setKeepScreenOn();
+        }
+        function vibrate(){
+            jsok.vibrate(500);
+        }
+        function setClipboardData(){
+            jsok.setClipboardData('测试设置剪切板内容');
+        }
+        function getClipboardData(){
+            jsok.showShortToast("剪切板内容：" + jsok.getClipboardData());
+        }
+
+        function makePhoneCall(){
+            jsok.makePhoneCall('18688901203');
+        }
+        function setStorage(){
+            jsok.setStorage('cunchushuju', '测试的存储数据');
+        }
+        function getStorage(){
+            jsok.showShortToast("" + jsok.getStorage('cunchushuju'));
+        }
+        function removeStorage(){
+            jsok.removeStorage('cunchushuju');
+        }
+        function clearStorage(){
+            jsok.clearStorage();
+        }
+        function showShortToast(){
+            jsok.showShortToast('短时间显示');
+        }
+        function showLongToast(){
+            jsok.showLongToast('长时间显示');
+        }
+        function systemShare(){
+            jsok.systemShare({'title':'系统分享','content':'测试分享的内容','imageUrl':'1234556'});
+        }
+        function getSystemInfo(){
+            var txt = document.getElementById('getsysinfo');
+            txt.innerText = jsok.getSystemInfo();
+        }
+        function getLoginInfo(){
+            var obj4 = document.getElementById('getlogininfo');
+            obj4.innerText = jsok.getLoginInfo();
+        }
+        function checkJsApi(){
+            var js_api = document.getElementById('jsApi');
+            js_api.innerText = jsok.checkJsApi();
+        }
+        function request(method){
+            var url = 'http://api.cloud.189.cn';
+            var param = '{"x":11, "y":34}';
+            if (method.toLowerCase() == "get") {
+                var get_result = document.getElementById('get_req_result');
+                jsok.request({"method":method,"url":url,data:param},function(resp){
+                    get_result.innerText = resp.result == 0 ? resp.data : resp.errMsg;
+                });
+            } else if (method.toLowerCase() == "post") {
+                var post_result = document.getElementById('post_req_result');
+                jsok.request({"method":method,"url":url,data:param},function(resp){
+                    post_result.innerText = resp.result == 0 ? resp.data : resp.errMsg;
+                });
+            }
+        }
+        function downloadFile(){
+            var url = 'https://www.baidu.com/img/bd_logo1.png';
+            var result_info = document.getElementById('download_file_result_info');
+            var preview_img = document.getElementById('downloaded_img');
+            jsok.downloadFile(url, 'baidu_logo.png', function(resp){
+                if (resp.result == 0) {
+                    result_info.innerText = "下载的文件路径：" + resp.filePath;
+                    preview_img.src = resp.filePath;
+                    downloadedImgPath = resp.filePath;
+                } else {
+                    result_info.innerText = "下载失败：" + resp.errMsg;
+                    preview_img.src = "";
+                    downloadedImgPath = "";
+                }
+
+            });
+        }
+        function uploadFile(){
+            var url = 'http://10.16.32.231:3000/uploadFile';
+            var result_info = document.getElementById('upload_file_result_info');
+            result_info.innerText = "上传的文件路径：" + downloadedImgPath;
+            jsok.uploadFile(url, downloadedImgPath, function(resp){
+                   if (0 == resp.result) {
+                        jsok.showShortToast('上传成功');
+                   } else {
+                        jsok.showShortToast("上传失败");
+                        result_info.innerText += "\n上传失败原因：" + resp.errMsg;
+                   }
+            });
+        }
+        function selectMobileDataToRequest(){
+            var url = 'http://api.cloud.189.cn';
+            jsok.selectMobileDataToRequest(url, function(resp){
+                if (0 == resp.result) {
+                   jsok.showShortToast('选择成功');
+                } else {
+                   jsok.showShortToast("选择失败");
+                }
+            })
+        }
+    </script>
+</body>
+</html>
