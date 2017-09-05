@@ -2,8 +2,8 @@ package com.cn21.onekit.lib.utils;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 
+import com.cn21.onekit.core.OneKitManager;
 import com.cn21.onekit.core.utils.FileUtil;
 
 import org.json.JSONException;
@@ -25,7 +25,6 @@ import java.util.Map;
 public class UpdateResourcesUtils {
     private static final String TAG = UpdateResourcesUtils.class.getSimpleName();
 
-    private static final long INTERVAL_TIME = 0 * 60 * 60 * 1000L; //更新资源包时间间隔24小时
     private static final String RESOURCE_ZIP_DIR_NAME = "/onekit/zip/";
     private static final String RESOURCE_UNZIP_DIR_NAME = "/onekit/h5/";
 
@@ -35,9 +34,9 @@ public class UpdateResourcesUtils {
      * @return
      */
     public static boolean isNeedToUpdate(Context context) {
-        boolean updateSuccessFlag = DefaultShared.getBoolean(context,Constants.KEY_UPDATE_SUCCESS_FLAG, false);
-        long updateSuccessTime = DefaultShared.getLong(context,Constants.KEY_UPDATE_SUCCESS_TIME, 0L);
-        if (!updateSuccessFlag || (updateSuccessFlag && (System.currentTimeMillis() - updateSuccessTime > INTERVAL_TIME))) {
+        boolean updateSuccessFlag = DefaultShared.getBoolean(context, Constants.KEY_UPDATE_SUCCESS_FLAG, false);
+        long updateSuccessTime = DefaultShared.getLong(context, Constants.KEY_UPDATE_SUCCESS_TIME, 0L);
+        if (!updateSuccessFlag || (updateSuccessFlag && (System.currentTimeMillis() - updateSuccessTime > OneKitManager.getInstance().getOneKitConfig().getOneKitResourceInvalidTime()))) {
             return true;
         }
         return false;
@@ -209,8 +208,9 @@ public class UpdateResourcesUtils {
             if(jsonObject == null){
                 return;
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            return;
         }
         Iterator iterator = jsonObject.keys();
         Map<String, String> map = new HashMap();

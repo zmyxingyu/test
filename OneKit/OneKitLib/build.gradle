@@ -7,29 +7,46 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
+        buildConfigField('boolean', 'DOWLOAD_MODE', ENABLE_DOWNLOAD_MODE as String)
     }
     buildTypes {
         release {
+            boolean download_mode = Boolean.parseBoolean(ENABLE_DOWNLOAD_MODE as String)
             minifyEnabled Boolean.parseBoolean(PROGUARD_LIB_IN_RELEASE as String)
             proguardFiles '../proguard-android.txt', 'proguard-rules.pro'
+            if (!download_mode) {
+                //嵌入模式需增加对应的 proguard 文件
+                System.out.println("-----> add embed proguard file in embed mode\n")
+                proguardFile 'proguard-xwalk-embed.txt'
+            }
+        }
+    }
+
+    libraryVariants.all {
+        it.outputs.each { o ->
+            if (o.outputFile.name.endsWith(".aar")) {
+                o.outputFile = new File(o.outputFile.parentFile,
+                        "OneKitLib-${o.name}-v${defaultConfig.versionName}.aar")
+            }
         }
     }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
     compile 'com.android.support:appcompat-v7:25.3.0'
-    testCompile 'junit:junit:4.12'
-    compile project(':OneKitDownload')
+    if (Boolean.parseBoolean(ENABLE_DOWNLOAD_MODE as String)) {
+        //下载或分享模式的工程库
+        compile project(':xwalk_shared_library')
+    } else {
+        //嵌入模式的aar
+        compile(name: 'crosswalk-23.53.589.4', ext: 'aar')
+    }
 
+    //for unit test
+    testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:1.9.5'
     testCompile 'org.robolectric:robolectric:3.3.2'
     configurations.all {
@@ -44,3 +61,16 @@ dependencies {
     testCompile "org.powermock:powermock-api-mockito:1.6.4"
     testCompile "org.powermock:powermock-classloading-xstream:1.6.4"
 }
+
+task javadoc(type: Javadoc) {
+    source = project.android.sourceSets.main.java.srcDirs
+//    source = project(':OneKitLib').fileTree(dir: "src/main/java",excludes: ['**/utils/*.java'])
+    classpath += project.files(project.android.getBootClasspath().join(File.pathSeparator))
+//    ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
+    destinationDir = file("../javadoc/")
+    options.linkSource true
+    options.encoding = "UTF-8" //解决中文字符GBK编码报错问题
+    options.charSet = 'UTF-8'
+    failOnError false
+}
+

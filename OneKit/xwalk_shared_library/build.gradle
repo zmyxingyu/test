@@ -7,12 +7,22 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 25
+        versionName "1.0.0"
     }
 
     buildTypes {
         release {
             minifyEnabled Boolean.parseBoolean(PROGUARD_LIB_IN_RELEASE as String)
             proguardFiles '../proguard-android.txt', 'proguard-xwalk-shared-library.txt'
+        }
+    }
+
+    libraryVariants.all {
+        it.outputs.each { o ->
+            if (o.outputFile.name.endsWith(".aar")) {
+                o.outputFile = new File(o.outputFile.parentFile,
+                        "OneKitLibCore-${o.name}-v${defaultConfig.versionName}.aar")
+            }
         }
     }
 }

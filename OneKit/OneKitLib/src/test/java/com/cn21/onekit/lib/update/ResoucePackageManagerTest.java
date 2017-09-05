@@ -16,7 +16,7 @@ import com.cn21.onekit.lib.utils.Constants;
 import com.cn21.onekit.lib.utils.DefaultShared;
 
 /**
- * Created by Administrator on 2017/7/26.
+ * Created by zhangmy on 2017/7/26.
  */
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE,sdk = 21)
@@ -77,8 +77,9 @@ public class ResoucePackageManagerTest {
         Method method = getMethod(ResoucePackageManager.class, "downloadResourcePackage", new Class[]{Context.class, UpdateResourceResModel.class});
         method.setAccessible(true);
         method.invoke(rpm, context, usm);
-
     }
+
+
 
 
 }

@@ -15,15 +15,18 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.cn21.onekit.android.net.HttpConnUtil;
+import com.cn21.onekit.core.OKViewClient;
 import com.cn21.onekit.core.OneKitManager;
 import com.cn21.onekit.core.OneKitView;
 import com.cn21.onekit.lib.jsinter.OkBridgeApiImpl;
 import com.cn21.onekit.lib.jsinter.OneKitJsCallback;
 
-public class JsBridgeActivity extends OneKitActivity implements OneKitJsCallback {
+public class JsBridgeActivity extends BaseActivity implements OneKitJsCallback {
     private ActionBar mActionBar;
     private OneKitView mOneKitView;
     private OkBridgeApiImpl mDefOkBridgeApiImpl;
@@ -42,9 +45,17 @@ public class JsBridgeActivity extends OneKitActivity implements OneKitJsCallback
                     WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
         }
 
+        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         mOneKitView = (OneKitView) findViewById(R.id.my_onekit);
 
 //        mOneKitView.loadUrl("http://www.baidu.com");
+        mOneKitView.setOKViewClient(new OKViewClient(){
+            @Override
+            public void onLoadFinished(OneKitView view, String url) {
+                super.onLoadFinished(view, url);
+                progressBar.setVisibility(View.GONE);
+            }
+        });
         mOneKitView.loadUrl("file:///android_asset/test/junitdemo.html");
         mDefOkBridgeApiImpl = new OkBridgeApiImpl(this);
         mDefOkBridgeApiImpl.setOneKitProvider(mOneKitView.getOneKitProvider());
@@ -104,7 +115,6 @@ public class JsBridgeActivity extends OneKitActivity implements OneKitJsCallback
         if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission Granted
-                OneKitManager.getInstance().init(this);
             } else {
                 // Permission Denied
                 Toast.makeText(this, "申请写入SD卡权限失败", Toast.LENGTH_SHORT).show();

@@ -34,3 +34,58 @@
 -keep class com.cn21.onekit.lib.update.ResoucePackageManager{
     public <methods>;
 }
+-keep class com.cn21.onekit.lib.update.CommonApiManager{
+    public <methods>;
+}
+-keep class com.cn21.onekit.lib.update.CommonApiManager$SwitchListener{
+    public <methods>;
+}
+-keep interface com.cn21.onekit.lib.update.ResourceDownloadListener{
+    *;
+}
+
+-keepattributes SourceFile,InnerClasses,LineNumberTable,*Annotation*
+-keep class com.cn21.onekit.core.OKSettings{
+    public <methods>;
+    <init>(...);
+}
+-keep class com.cn21.onekit.core.OneKitManager{
+    public <methods>;
+}
+-keep class com.cn21.onekit.core.OneKitManager$CheckXWalkStatusListener{
+    public <methods>;
+}
+
+-keep class com.cn21.onekit.core.OneKitConfig{
+    public <methods>;
+}
+-keep class com.cn21.onekit.core.OneKitConfig$Builder{
+    public <methods>;
+}
+-keep class com.cn21.onekit.core.FilterManager{
+    public <methods>;
+}
+-keep interface com.cn21.onekit.core.OneKitInitListener{
+    *;
+}
+-keep interface com.cn21.onekit.core.OneKitRuntime{
+    *;
+}
+-keep interface com.cn21.onekit.core.OneKitProvider{
+    *;
+}
+-keep class com.cn21.onekit.core.utils.FileUtil{
+    public static final <fields>;
+    public static <methods>;
+}
+-keep class com.cn21.onekit.core.utils.OneKitUtils{
+    public static final <fields>;
+    public static <methods>;
+}
+-keep public class com.cn21.onekit.core.OneKitView {
+    <init>(...);
+    public <methods>;
+}
+-keep class com.cn21.onekit.core.OKViewClient {
+    *;
+}

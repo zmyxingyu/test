@@ -16,6 +16,14 @@
     <!--bugly-->
     <uses-permission android:name="android.permission.READ_LOGS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!--UX SDK-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".MyApplication"
@@ -24,6 +32,28 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/AppTheme">
+
+        <!--UX CONFIG START-->
+        <service android:name="com.cn21.ued.apm.service.UxService"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="cn21.uedapm.Service.BASE_TYPE_SERVICE" />
+            </intent-filter>
+        </service>
+        <meta-data
+            android:name="UED_APM_APP_ID"
+            android:value="D5B78E5D0127414E9D2BEA93124982CB\0" >
+        </meta-data>
+        <meta-data
+            android:name="UED_APM_APP_KEY"
+            android:value="MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCrzmpKzagrsbLkh4MZdR+VQzvkmZoLsGr9aoj0SdJ5GaqsMo5+ZQZkLeeA2kG5c14H5RSZhcFTYVow3uNjqufPvjDVGNkqPO6xyPtTlPyXaAl5f92EC/dJchHzCEwcJIfuB3mycdJs5eOYJrQg7JtMezPgWfQVX1kGHn1yzwIH8QIDAQAB\0" >
+        </meta-data>
+        <meta-data
+            android:name="UED_APM_APP_CHANNEL"
+            android:value="OneKit\0" >
+        </meta-data>
+        <!--UX CONFIG END-->
+
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait">
@@ -40,18 +70,21 @@
             android:name=".ResourceActivity"
             android:screenOrientation="portrait" />
 
-        <meta-data
+        <!--嵌入模式需要删除xwalk配置-->
+        <!--xwalk配置 start-->
+<!--        <meta-data
             android:name="xwalk_apk_url"
-            android:value="http://10.16.32.201:4000/download/XWalkRuntimeLib.apk" />
+            android:value="http://10.16.33.127:3000/download/XWalkRuntimeLib.apk" />
         <meta-data
             android:name="xwalk_enable_download_mode"
             android:value="enable" />
         <meta-data
             android:name="xwalk_verify"
-            android:value="disable" />
+            android:value="disable" />-->
+        <!--xwalk配置 end-->
         <meta-data
             android:name="resource_url"
-            android:value="http://10.20.12.11:3000" />
+            android:value="http://10.16.33.127:3000" />
     </application>
 
 </manifest>

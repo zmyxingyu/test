@@ -10,8 +10,12 @@
     *;
 }
 -keep class android.webkit.JavascriptInterface
+-keepclassmembers interface com.cn21.onekit.lib.jsinter.OkBridgeApi{
+    <methods>;
+}
 -keepattributes **
 -keepattributes Signature,Exceptions,InnerClasses,EnclosingMethod,Deprecated
 -keepattributes *Annotation*
 -keepattributes SourceFile,LineNumberTable
 -keepattributes *JavascriptInterface*
+-dontwarn org.chromium.**

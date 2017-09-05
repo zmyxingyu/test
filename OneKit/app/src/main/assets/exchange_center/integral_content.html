@@ -1,0 +1,173 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="keywords" content="看荐、阅读软件、好文章、好文推荐、有趣文章、朋友圈热文、朋友圈分享、好友转发、赚钱软件、搞笑app、文艺app、无聊、朋友圈热门文章、名人推荐文章、类似知乎、类似豆瓣、看见、名人看什么">
+    <meta name="description" content="看荐是一款基于用户推荐内容的移动阅读软件。它能够不同平台上的资讯、图文等，通过用户推荐、小编精选和个性化定制，将你感兴趣的趣味内容聚合到你的首页。任何用户都可以通过微博、微信、QQ等转发分享文章，也可以通过阅读、点赞、评论等行为影响内容热度。">
+    <title>兑换中心</title>
+    <link rel="stylesheet" href="dist/css/sm.css">
+    <link rel="stylesheet" href="css/css.css">
+    <style>
+        .modal{
+            margin-left:1em;
+            margin-right: 1em;
+            width: 91%;
+            left:0;
+        }
+        .modal-inner{
+            background: #fff;
+            border-top-right-radius: 5px;
+            border-top-left-radius: 5px;
+        }
+        .modal-inner:after{
+            background: #fff;
+        }
+        .modal-buttons{
+            background: #fff;
+            padding: 0 25px;
+            padding-bottom: 28px;
+            height: auto !important;
+            border-bottom-right-radius: 5px;
+            border-bottom-left-radius: 5px;
+        }
+        .modal-button{
+            background: #fff;
+            width: initial;
+            height: auto;
+            padding: 0;
+            line-height: inherit;
+            position: static;
+            overflow: initial;
+            -webkit-user-select:none;
+            user-select: none;
+            margin: 0 3px;
+        }
+        .modal-button:after{
+            background: #fff;
+        }
+        .confirm_button{
+            width: 123px;
+            color: #fff;
+            height:44px;
+            line-height: 44px;
+            border-radius: 5px;
+            display: inline-block;
+            padding-bottom: 28px;
+
+        }
+        @media (max-width: 320px) {
+            .confirm_button{
+                width: 113px;
+            }
+        }
+        .confirm_button:active{
+            color: #fff;
+        }
+        .confirm_button_new:active{
+            background:#cc5200 !important;
+        }
+        .cancle{
+            background: #c0c0c0;
+
+        }
+        .look{
+            background: #f1754a;
+        }
+    </style>
+</head>
+<body>
+<div class="page-group">
+    <div id="page-grid" class="page">
+        <div class="content">
+            <div class="content-padded grid-demo">
+                <div class="integral_content">
+                    <div class="col-50">
+                        <img src="images/lt_50.jpg" id="img">
+                        <i id="firstI" style="padding-bottom: 5px;"></i>
+                        <i>积分兑换:<span class="orange" id="orange"></span><span class="list_grouth list_con" id="grouth"></span></i>
+
+                    </div>
+                    <a href="#" id="exchange_a" class="button button-fill button-warning exchange">兑换</a>
+                </div>
+                <div class="internal_title">商品简介</div>
+                <div class="good_about">
+                   <ul>
+                       <li>1、使用范围： 本流量包为全国流量，用户可在全国范围内使用（港澳台除外）。</li>
+                       <li>2、使用时段：全天24小时，不分时段。</li>
+                       <li>3、使用网络：中国<span id="span_Open"></span>2G/3G/4G通用网络。</li>
+                       <li>注：充值流量会在24小时内充入手机账户，请留意手机短信通知。</li>
+                    </ul>
+
+                </div>
+                <div class="internal_title" style="padding-top: 27px;">兑换规则</div>
+                <div class="good_about">
+                    <ul>
+                        <li>1、积分可兑换相应的流量。</li>
+                        <li>2、拨打<span id="span_phone"></span>，转人工台，可进行查询。</li>
+                        <li>3、虚拟商品，兑换后概不退还，敬请谅解。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- About Popup -->
+<div class="popup popup-about">
+    <div class="content-block">
+
+    </div>
+</div>
+<script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.js' charset='utf-8'></script>
+<script type='text/javascript' src='dist/js/sm.js' charset='utf-8'></script>
+<script src="js/index.js"></script>
+<script>
+    $(function(){
+        $('#img').attr('src','images/'+exchange_num+'.jpg');
+        $('#firstI').html(exchange_con);
+        $('#orange').html(exchange_orange);
+        $('#grouth').html(exchange_grouth);
+        var flow = exchange_num.substr(3);
+        var Open = exchange_con.substr(0,2);
+        $('#span_Open').html(Open);
+        switch (Open){
+            case "联通":
+                $('#span_phone').html(10010);
+                break;
+            case "移动":
+                $('#span_phone').html(10086);
+                break;
+            case "电信":
+                $('#span_phone').html(10000);
+                break;
+        }
+
+        $(document).on('click','#exchange_a', function (){
+            if(parseInt(totalCredit) >= parseInt(exchange_orange)){
+                $('#exchange_a').removeClass('disabled');
+
+                window.location.href='input.html?Open='+Open+'&encryptParams='+encryptParams+'&flow='+flow;
+            }else{
+                $.modal({
+                   title:  '<div class="none_integral">积分不足啦！</div>',
+                   text: '<div class="title_look">看看如何赚取吧。</div>',
+                   buttons: [
+                        {
+                           text: '<a class="cancle confirm_button">取消</a>',
+                        },
+                        {
+                           text: '<a class="look confirm_button confirm_button_new">去看看</a>',
+                                onClick: function() {
+                                    window.location.href='/api/score/integral_rule.html';
+                                }
+                        }
+                        ]
+                    })
+            }
+        });
+    });
+</script>
+</body>
+</html>

@@ -119,6 +119,12 @@ public final class UrlMappingSharedPref {
        }
     }
 
+    public synchronized static Map<String, ?> getMap(Context context) {
+        if (null == context)
+            return null;
+        return getSpf(context).getAll();
+    }
+
     public static boolean getBoolean(Context context, String key, boolean defValue) {
         if (null != context && !TextUtils.isEmpty(key)) {
             try {

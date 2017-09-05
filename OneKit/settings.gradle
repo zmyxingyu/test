@@ -1,2 +1,2 @@
-include ':app', ':OneKitLib', ':OneKitEmbedding', ':OneKitDownload'
+include ':app', ':OneKitLib'
 include ':xwalk_shared_library'

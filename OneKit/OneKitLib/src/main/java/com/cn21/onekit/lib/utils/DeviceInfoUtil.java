@@ -84,7 +84,6 @@ public class DeviceInfoUtil {
     }
 
     /**
-    /**
      * 根据imsi判断运营商 cm-移动, ct-电信, cu-联通, ""-无法判断
      */
     public static String getISPType(String imsi) {

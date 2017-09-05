@@ -5,18 +5,18 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.cn21.onekit.lib.R;
+import com.cn21.onekit.core.OneKitManager;
+import com.cn21.onekit.lib.update.ResoucePackageManager;
 import com.cn21.onekit.lib.update.UpdateResourceResModel;
 import com.cn21.onekit.lib.utils.AndroidUtils;
 import com.cn21.onekit.lib.utils.Constants;
 import com.cn21.onekit.lib.utils.DefaultShared;
-import com.cn21.onekit.lib.utils.DeviceInfoUtil;
 import com.cn21.onekit.lib.utils.XXTeaUtil;
 
-import org.chromium.components.location.LocationUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -33,21 +33,10 @@ import java.util.UUID;
 public class NetAccessor {
 
     private static final String TAG = NetAccessor.class.getSimpleName();
-    private static String BASE_URL;
-    private static String UPDATE_RESOURCE_URL = "api/clientSuit/updateResource.do"; //使用本地资源包更新接口
+
     public static final String TYPE_H5 = "H5";
 
-    public static String getBaseUrl(Context context) {
-        if (TextUtils.isEmpty(BASE_URL)) {
-            String metaUrl = AndroidUtils.getApplicationMataValue(context, "resource_url");
-            setBaseUrl(metaUrl);
-        }
-        return BASE_URL;
-    }
 
-    public static void setBaseUrl(String baseUrl) {
-        BASE_URL = baseUrl;
-    }
 
     /**
      * 检查本地资源包是否有更新
@@ -55,9 +44,9 @@ public class NetAccessor {
      * @param appId
      * @return
      */
-    public static UpdateResourceResModel checkUpdateResource(Context context, String appId, String resourceVersion) {
+    public static UpdateResourceResModel checkUpdateResource(Context context, @NonNull String url, @NonNull String appId, String resourceVersion) {
         String params = getUpdateParms(context, appId, resourceVersion); //本地资源包更新接口参数
-        return postUpdateResource(context, getBaseUrl(context) + "/api/updateResource?", params);
+        return postUpdateResource(context, url + "?", params);
     }
 
     public static UpdateResourceResModel checkUpdateResource(Context context, String requestUrl) {
@@ -111,7 +100,7 @@ public class NetAccessor {
                 throw new Exception("can not resolve response,status of use xwalkview ");
             }
             if (job != null) {
-                return job.optBoolean("statu");
+                return job.optBoolean("status");
             }
         } else {
             throw new Exception("null response,status of use xwalkview ");
@@ -145,19 +134,20 @@ public class NetAccessor {
      * @return
      */
     private static String getUpdateParms(Context mContext, String appId, String resourceVersion) {
+        //TODO account should fix
         StringBuffer sb = new StringBuffer();
         sb.append("appId=").append(appId).
-                append("&appVersion=").append(getVersion(mContext)).
-                append("&sysVersion=").append(Build.VERSION.SDK_INT).
-                append("&resourceVersion=").append(resourceVersion).
+                append("&appVersion=").append("1.1.1").//getVersion(mContext)
+                append("&sysVersion=").append("6.0.0").//Build.VERSION.SDK_INT
+                append("&resourceVersion=").append(resourceVersion).//resourceVersion
                 append("&resourceType=").append(TYPE_H5).
                 append("&system=").append("android").
                 append("&deviceId=").append(getDeviceId(mContext)).
-                append("&account=").append("18148910925");
+                append("&account=").append(OneKitManager.getInstance().getOnekitRuntime().getAccount());
 
         String sign = null;
         try {
-            sign = XXTeaUtil.encryptStr(sb.toString(), "UTF-8", XXTeaUtil.KEY);
+            sign = XXTeaUtil.encryptStr(sb.toString(), "UTF-8", OneKitManager.getInstance().getOnekitRuntime().getAppSecret());
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             return null;

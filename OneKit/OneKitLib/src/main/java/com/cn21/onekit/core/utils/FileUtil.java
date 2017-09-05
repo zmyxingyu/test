@@ -1,0 +1,436 @@
+package com.cn21.onekit.core.utils;
+
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.Closeable;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.security.MessageDigest;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
+import android.content.Context;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.text.TextUtils;
+import android.util.Log;
+
+/**
+ * 作者：${fuyanan} on 2017/1/18 15:17
+ */
+
+public class FileUtil {
+    private final static String TAG = FileUtil.class.getSimpleName();
+
+    /**
+     * java中获取指定文件夹下所有除后缀名.png和文件名为md5values.txt的路径
+     *
+     * @param file
+     * @return
+     */
+    public static List traverseFolder2(File file, List<String> resultFileName) {
+        if (file.exists() && file.isDirectory()) {
+            File[] files = file.listFiles();
+            if (files.length == 0) {
+                Log.d(TAG, "文件夹是空的!");
+                return null;
+            } else {
+                for (File f : files) {
+                    if (f.isDirectory()) {
+                        traverseFolder2(f, resultFileName);
+                    } else {
+                        if (!f.getName().toLowerCase().endsWith("manifest.json")) {
+                            resultFileName.add(f.getAbsolutePath().replaceAll("\\\\", "/"));
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 读取指定路径的文件的内容
+     * @param Path
+     * @return
+     */
+    public static String readFile(String Path) {
+        BufferedReader reader = null;
+        StringBuilder lastStr = new StringBuilder();
+        FileInputStream fileInputStream = null ;
+        try {
+            fileInputStream = new FileInputStream(Path);
+            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, "UTF-8");
+            reader = new BufferedReader(inputStreamReader);
+            String tempString = null;
+            while ((tempString = reader.readLine()) != null) {
+                lastStr.append(tempString);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(fileInputStream != null ){
+               try {
+                   fileInputStream.close();
+               }catch (Exception e){
+                   e.printStackTrace();
+               }
+            }
+
+        }
+        return lastStr.toString();
+    }
+
+    /**
+     * 在指定的文本中查找指定文字
+     * @param filePath
+     * @return true表示找到指定文字
+     */
+    public static boolean findTxtInFile(String filePath, String txt) {
+        if (TextUtils.isEmpty(txt)) {
+            return false;
+        }
+        BufferedReader reader = null;
+        try {
+            InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(filePath), "UTF-8");
+            reader = new BufferedReader(inputStreamReader);
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                if (line.contains(txt)) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(reader);
+        }
+        return false;
+    }
+
+    /**
+     * 读取某个目录下面的文件md5values.txt中的内容
+     * @param file
+     * @return
+     */
+    public static String findTxtFile(File file) {
+        String jsonMD5 = "";
+        if (file == null || !file.isDirectory()) {
+            return "";
+        }
+        File[] files = file.listFiles();
+        for (int i = 0; i < files.length; i++) {
+            if (files[i].isDirectory()) {
+                findTxtFile(files[i]);
+            } else {
+                String filename = files[i].getName();
+                if (filename.toLowerCase().endsWith("md5values.txt")) {
+                    jsonMD5 = readFile(files[i].getPath());
+                    return jsonMD5;
+                }
+            }
+        }
+        return jsonMD5;
+    }
+
+    /**
+     * 删除文件，可以是文件或文件夹
+     *
+     * @param file 要删除的文件或文件夹目录
+     * @return 删除成功返回true，否则返回false
+     */
+    public static boolean delete(File file) {
+        if (null == file || !file.exists()) {
+            return false;
+        } else {
+            if (file.isFile() && file.delete())
+                return true;
+            else {
+                if (file.exists() && file.isFile() && file.delete()) return true;
+                if (file.exists() && file.isDirectory()) {
+                    // 删除文件夹中的所有文件包括子目录
+                    File[] files = file.listFiles();
+                    for (int i = 0; i < files.length; i++) {
+                        // 删除子文件
+                        if (files[i].isFile() && !files[i].delete()) {
+                            return false;
+                        }
+                        // 删除子目录
+                        else if (files[i].isDirectory() && !FileUtil.delete(files[i])) {
+                            return false;
+                        }
+                    }
+                    file.delete();
+                }
+            }
+        }
+        return  true;
+    }
+
+
+
+
+    /**
+     * Gets the corresponding path to a file from the given content:// URI
+     *
+     * @param selectedVideoUri The content:// URI to find the file path from
+     * @param context          .
+     * @return the file path as a string
+     */
+    public static String getFilePathFromContentUri(Uri selectedVideoUri,
+                                                   Context context) {
+        if (selectedVideoUri == null || context.getContentResolver() == null)
+            return "";
+        String filePath;
+        String[] filePathColumn = {MediaStore.MediaColumns.DATA};
+        Cursor cursor = context.getContentResolver().query(selectedVideoUri, filePathColumn, null, null, null);
+//	    也可用下面的方法拿到cursor
+//	    Cursor cursor = this.context.managedQuery(selectedVideoUri, filePathColumn, null, null, null);
+        cursor.moveToFirst();
+        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+        filePath = cursor.getString(columnIndex);
+        cursor.close();
+        if (filePath == null) {
+            InputStream inStream = null;
+            try {
+                inStream = context.getContentResolver().openInputStream(selectedVideoUri);
+                Bitmap bitmap = BitmapFactory.decodeStream(inStream);
+                if (checkSDard()) {
+                    File pictureDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+                    String saveBitmapName = "temp.jpg" ;
+                    saveBitmapFile(bitmap, pictureDir + "/"+saveBitmapName);
+                    filePath = pictureDir + "/"+saveBitmapName;
+                }else{
+                    Log.d(TAG,"sd卡不存在");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (inStream != null) {
+                    try {
+                        inStream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        return filePath;
+    }
+
+    public static void saveBitmapFile(Bitmap bitmap , String filePath){
+        File file=new File(filePath);//将要保存图片的路径
+        try {
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+            bos.flush();
+            bos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean checkSDard() {
+        boolean flag = Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+        return flag;
+    }
+
+    /**
+     * 从指定的服务器路径下载文件
+     *
+     * @param serverPath
+     * @param file
+     * @return
+     */
+    public static boolean downLoad(String serverPath, File file) {
+        InputStream is = null;
+        FileOutputStream fileOutputStream = null;
+        try {
+            URL url = new URL(serverPath);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setConnectTimeout(5000);
+            int code = conn.getResponseCode();
+            if (code == 200) {
+                is = conn.getInputStream();
+                fileOutputStream = new FileOutputStream(file);
+                int len;
+                byte[] buffer = new byte[1024];
+                int total = 0;
+                while ((len = is.read(buffer)) != -1) {
+                    fileOutputStream.write(buffer, 0, len);
+                    total += len;
+                }
+                fileOutputStream.flush();
+                return true;
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }finally {
+            try{
+                if (is != null){
+                    is.close();
+                }
+                if (fileOutputStream != null){
+                    fileOutputStream.close();
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 获得文件的MD5值
+     * @param file
+     * @return
+     * @throws FileNotFoundException
+     */
+    public static String getMd5ByFile(File file) throws FileNotFoundException {
+        String value = null;
+        FileInputStream in = new FileInputStream(file);
+        try {
+            MappedByteBuffer byteBuffer = in.getChannel().map(FileChannel.MapMode.READ_ONLY, 0, file.length());
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+            md5.update(byteBuffer);
+            byte[] result=md5.digest();
+            return byteArrayToHex(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(null != in) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return value;
+    }
+
+    private static String byteArrayToHex(byte[] byteArray) {
+
+        char[] hexDigits = {'0','1','2','3','4','5','6','7','8','9', 'a','b','c','d','e','f' };
+        char[] resultCharArray =new char[byteArray.length * 2];
+        int index = 0;
+
+        for (byte b : byteArray) {
+            resultCharArray[index++] = hexDigits[b>>> 4 & 0xf];
+            resultCharArray[index++] = hexDigits[b& 0xf];
+        }
+        return new String(resultCharArray);
+    }
+
+    /**
+     * 解压ZIP到指定路径
+     * @param zipFilePath  ZIP文件的路径
+     * @param saveRootDirectory 解压到指定路径(注意最后要加/)
+     * @return
+     */
+    public static Boolean zipFileRead(String zipFilePath, String saveRootDirectory) {
+        Boolean isUnZipFolderSuccess = false;
+        ZipFile zipFile = null;
+        try {
+            // 获得zip信息
+            zipFile = new ZipFile(zipFilePath);
+            Enumeration<ZipEntry> enu = (Enumeration<ZipEntry>) zipFile.entries();
+            while (enu.hasMoreElements()) {
+                ZipEntry zipElement =  enu.nextElement();
+                InputStream read = zipFile.getInputStream(zipElement);
+                String fileName = zipElement.getName();
+                if (fileName != null && fileName.lastIndexOf("/") + 1 != fileName.length()) {// 是否为文件
+                    unZipFile(zipElement, read, saveRootDirectory);
+                }
+            }
+            isUnZipFolderSuccess = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(zipFile!=null)
+                    zipFile.close();
+                zipFile = null;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return isUnZipFolderSuccess;
+    }
+
+
+    /**
+     * @param
+     * @return void 返回类型
+     * @throws
+     * @Description: TODO(找到文件并读取解压到指定目录)
+     */
+    private static boolean unZipFile(ZipEntry ze, InputStream read, String saveRootDirectory) throws IOException {
+        // 如果只读取图片，自行判断就OK.
+        String fileName = ze.getName();
+        // 判断文件是否符合要求或者是指定的某一类型
+        // 指定要解压出来的文件格式（这些格式可抽取放置在集合或String数组通过参数传递进来，方法更通用）
+        File file = new File(saveRootDirectory + fileName);
+        if (!file.exists()) {
+            File rootDirectoryFile = new File(file.getParent());
+            // 创建目录
+            if (!rootDirectoryFile.exists()&&!rootDirectoryFile.mkdirs()) {
+                Log.d(TAG,"unZipFile()" + "文件创建失败!");
+                return false;
+            }
+            // 创建文件
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        // 写入文件
+        BufferedOutputStream write = new BufferedOutputStream(
+                new FileOutputStream(file));
+        int cha = 0;
+        while ((cha = read.read()) != -1) {
+            write.write(cha);
+        }
+        // 要注意IO流关闭的先后顺序
+        write.flush();
+        write.close();
+        read.close();
+        return true;
+    }
+
+    public static void close(Closeable closeable) {
+        try {
+            if (closeable != null) {
+                closeable.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}

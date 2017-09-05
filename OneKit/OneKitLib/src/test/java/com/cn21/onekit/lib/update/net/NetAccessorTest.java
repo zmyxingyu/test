@@ -97,7 +97,7 @@ public class NetAccessorTest {
     public void testCheckUseOneKit(){
         boolean b = false;
         try {
-            b = NetAccessor.checkOpenOneKit(context,"http://10.16.32.183:4000/api/getStatu");
+            b = NetAccessor.checkOpenOneKit(context,"http://10.16.33.150:3000/api/getSwitch");
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail();

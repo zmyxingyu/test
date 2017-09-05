@@ -1,0 +1,204 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="keywords" content="看荐、阅读软件、好文章、好文推荐、有趣文章、朋友圈热文、朋友圈分享、好友转发、赚钱软件、搞笑app、文艺app、无聊、朋友圈热门文章、名人推荐文章、类似知乎、类似豆瓣、看见、名人看什么">
+    <meta name="description" content="看荐是一款基于用户推荐内容的移动阅读软件。它能够不同平台上的资讯、图文等，通过用户推荐、小编精选和个性化定制，将你感兴趣的趣味内容聚合到你的首页。任何用户都可以通过微博、微信、QQ等转发分享文章，也可以通过阅读、点赞、评论等行为影响内容热度。">
+    <title>兑换中心</title>
+    <link rel="stylesheet" href="dist/css/sm.min.css">
+    <link rel="stylesheet" href="css/css.css">
+    <style>
+        .modal{
+            margin-left:1em;
+            margin-right: 1em;
+            width: 91%;
+            left:0;
+            text-align: left !important;
+        }
+        .modal-inner{
+            padding:.55em 1.75em;
+            background: #fff;
+            border-top-right-radius: 5px;
+            border-top-left-radius: 5px;
+        }
+        .modal-inner:after{
+            background: #fff;
+        }
+        .modal-title{
+            text-align: left !important;
+        }
+        .modal-buttons{
+            background: #fff;
+            padding: 0 25px;
+            padding-top: 12px;
+            padding-bottom: 28px;
+            height: auto !important;
+            border-bottom-right-radius: 5px;
+            border-bottom-left-radius: 5px;
+        }
+        .modal-button{
+            background: #fff;
+            width: initial;
+            height: auto;
+            padding: 0;
+            line-height: inherit;
+            position: static;
+            overflow: initial;
+            -webkit-user-select:none;
+            user-select: none;
+            margin: 0 3px;
+        }
+        .modal-button:after{
+            background: #fff;
+        }
+        .confirm_button{
+            width: 123px;
+            color: #fff;
+            height:44px;
+            line-height: 44px;
+            border-radius: 5px;
+            display: inline-block;
+            padding-bottom: 28px;
+        }
+        .confirm_button:active{
+            color: #fff;
+        }
+        .confirm_button_new:active{
+            background:#cc5200 !important;
+        }
+        .cancle{
+            background: #c0c0c0;
+
+        }
+        .look{
+            background: #f1754a;
+        }
+        .tips{
+            margin-top: 10px;;
+            line-height: 18px;
+            font-size: 12px;
+            color: #e93a2b;
+        }
+    </style>
+</head>
+<body>
+<div class="page-group">
+    <div id="page-grid" class="page">
+        <div class="content" id=''>
+            <div class="content-padded grid-demo phone">
+                请输入兑换流量手机号码<br>
+                <input type="tel" maxlength="11" id="phone" placeholder="请输入手机号码" value="">
+                <div class="form_tip" id="form_tip"></div>
+                <a href="#" id="affirm" class="button  button-fill disabled affirm">确认</a>
+                <!--<p class="tips">* 因服务升级，2016.12.28-2017.01.03期间，联通、移动流量暂时无法兑换。</p>-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="loading-2" id="loading">
+    <div class="loading1">
+        <i></i>
+        <i></i>正在加载中...
+    </div>
+</div>
+
+<script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.js' charset='utf-8'></script>
+<script src="js/index.js"></script>
+<script>
+    $(function(){
+        var reg;
+        switch (Open){
+            case "联通":
+                reg = /^1(3[0-2]|5[56]|45|8[56]|76)/;
+                break;
+            case "移动":
+                reg = /^1(3[4-9]|47|5[0-27-9]|8[2-478]|78)/;
+                break;
+            case "电信":
+                reg = /^(133|153|177|180|181|189)\d{8}$/;
+                break;
+        }
+        var phone = $('#phone');
+        var form_tip = $('#form_tip');
+        //号码验证
+        phone.on('blur',function(){
+            var mobile = $.trim(phone.val());
+            if(mobile.length !=11 ){
+                $('#affirm').addClass('disabled').removeClass('success_button');
+                form_tip.html("");
+                return false;
+            }else{
+                if(reg.test(mobile)){
+                    yyName = '中国'+Open;
+                    form_tip.removeClass('red').html(yyName);
+                    $('#affirm').addClass('success_button').removeClass('disabled');
+                    this.blur();
+                }else{
+                    $('#affirm').addClass('disabled').removeClass('button-success');
+                    form_tip.addClass('red').html('请输入'+Open+'号码');
+                    return false;
+                }
+            }
+
+        }).on('input', function(){
+            $(this).triggerHandler('blur');
+        });
+
+        //兑换流量
+        $(document).on('click','.success_button', function (){
+            var phone_val = phone.val();
+            $.modal({
+                title:  '<div class="none_integral" style="font-size: 17px;">确认兑换号码</div>',
+                text: '<div class="title_look" style="font-size: 15px; font-weight: normal; color: #7d7d7d; padding-top: 8px;">您的手机号为：<br><span style="font-size: 16px; color: #333; font-size: 18px;">'+phone_val+'</span></div>',
+                buttons: [
+                    {
+                        text: '<a class="cancle confirm_button">返回修改</a>',
+                    },
+                    {
+                        text: '<a class="look confirm_button confirm_button_new">确认</a>',
+                        onClick: function() {
+                            $.ajax({
+                                url:'/api/score/exchange.do?',
+                                type:'GET',
+                                data:{
+                                    encryptParams:encryptParams,
+                                    phoneNumber:$.trim(phone.val()),
+                                    flowCode:flow,
+                                },
+                                beoforeSend:function(){
+                                    $('#loading').show();
+                                },
+                                success:function(data){
+                                    $('#loading').hide();
+                                    var data = typeof data === 'string' ? JSON.parse(data) : data;
+                                    if(data.ret == 0){
+                                        var popupHTML = '<div class="popup">'+
+                                                '<div class="content-block success">'+
+                                                '<img src="images/success.png">'+
+                                                '<span>我们的后台正努力为您处理，24小时内到账<br>请耐心等待～～</span>'+
+                                                '</div>'+
+                                                '</div>'
+                                        $.popup(popupHTML);
+                                    }else{
+                                        $.alert(data.msg);
+                                    }
+                                },
+                                error:function(){
+                                    $.alert("网络繁忙，请稍后再试");
+                                }
+
+                            });;
+                        }
+                    }
+                ]
+            })
+
+        });
+    });
+</script>
+</body>
+</html>

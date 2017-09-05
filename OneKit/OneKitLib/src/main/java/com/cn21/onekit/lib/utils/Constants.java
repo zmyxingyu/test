@@ -21,4 +21,6 @@ public class Constants {
     public static final String KEY_CHECK_USE_XWALKVIEW_TIME = "key_check_use_xwalkview_time";//请求开关状态时间
 
     public static final String  KEY_RANDOM_DEVICE_ID = "key_random_device_id";
+
+    public static final String DEFAULT_VERSION = "0.0.1";
 }

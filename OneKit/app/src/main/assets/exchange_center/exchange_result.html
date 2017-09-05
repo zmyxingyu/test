@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="keywords" content="看荐、阅读软件、好文章、好文推荐、有趣文章、朋友圈热文、朋友圈分享、好友转发、赚钱软件、搞笑app、文艺app、无聊、朋友圈热门文章、名人推荐文章、类似知乎、类似豆瓣、看见、名人看什么">
+    <meta name="description" content="看荐是一款基于用户推荐内容的移动阅读软件。它能够不同平台上的资讯、图文等，通过用户推荐、小编精选和个性化定制，将你感兴趣的趣味内容聚合到你的首页。任何用户都可以通过微博、微信、QQ等转发分享文章，也可以通过阅读、点赞、评论等行为影响内容热度。">
+    <title>兑换中心</title>
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="dist/css/dropload.css">
+    <link rel="stylesheet" href="css/css.css">
+</head>
+<body>
+<div class="page-group">
+    <div id="page-infinite-scroll-bottom" class="">
+        <div class="content infinite-scroll infinite-scroll-bottom" data-distance="50">
+            <div class="list-block media-list" style="margin: 0;">
+                <ul id="result_ul" style="background: none;">
+
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="ratefail_none" style="padding-top: 100px; color: #c6c6c6; font-weight: normal; position: absolute; text-align: center; width: 100%;"><img src="images/no_icon.png" width="125" style="width: 125px; margin: 0 auto;"> <br>
+    没有兑换记录
+</div>
+
+<script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.js' charset='utf-8'></script>
+<script type="text/javascript" src="dist/js/dropload.min.js" charset='utf-8'></script>
+<script src="js/index.js"></script>
+<script>
+    $(function(){
+
+      // exchange.ajax(encryptParams,1);
+        var counter = 0;
+        // 每页展示5个
+        var num = 5;
+        var pageStart = 0,pageEnd = 0;
+
+        // dropload
+        $('.content').dropload({
+            scrollArea : window,
+            loadDownFn : function(me){
+                $.ajax({
+                    type: 'GET',
+                    url: '/api/score/exchangeRecord.do',
+                    data:{
+                        encryptParams:encryptParams,
+                    },
+                    dataType: 'json',
+                    success: function(data){
+                        var html = '';
+                        var rate = '';
+                        counter++;
+                        pageEnd = num * counter;
+                        pageStart = pageEnd - num;
+                        if(data.recordList.length>0){
+                            for(var i = pageStart; i < pageEnd; i++){
+                                var time = data.recordList[i].exchangeTime;
+                                var date=new Date(time);
+                                if(data.recordList[i].status==1){
+                                    rate = '<span id="result_r" class="success_rate">兑换成功</span>';
+                                }else if(data.recordList[i].status==0){
+                                    rate = '<span id="result_r" class="disposal">处理中..</span>';
+                                }else{
+                                    rate = '<span id="rate_fail" class="success_rate">兑换失败</span>';
+                                }
+                                html += '<li> <a href="#" class="item-link item-content" style="padding-left:0.55em; "><div class="item-media"><img src="'+data.recordList[i].flowIconUrl+'" width="80"></div><div class="item-inner" style="padding-right: 0; background: none; margin-left: 0.55em;"> <div class="item-title-row col-50" style="margin: 0"><div class="item-title result_exchange"><i class="fisrt">'+data.recordList[i].flowName+'流量包</i><i>兑换积分:<span class="orange">'+data.recordList[i].creditUsed+'</span></i><i>兑换号码：'+data.recordList[i].phoneNumber+'</i> <i>'+exchange.format(date)+'</i></div><div class="item-after">'+rate+'</div> </div></div></a></li>';
+
+
+                                if((i + 1) >= data.recordList.length){
+                                    // 锁定
+                                    me.lock();
+                                    // 无数据
+                                    me.noData();
+                                    break;
+                                }
+                            }
+                            // 为了测试，延迟1秒加载
+                            setTimeout(function(){
+                                $('#result_ul').append(html);
+                                //$('.item-after').html(rate);
+                                // 每次数据加载完，必须重置
+                                me.resetload();
+                            },1000);
+                        }else{
+                            $('.dropload-down').hide();
+                            $('.ratefail_none').show();
+                        }
+
+                    },
+                    error: function(xhr, type){
+                        alert('Ajax error!');
+                        // 即使加载出错，也得重置
+                        me.resetload();
+                    }
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>

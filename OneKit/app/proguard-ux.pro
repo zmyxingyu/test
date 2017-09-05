@@ -1,0 +1,5 @@
+-keep class com.cn21.ued.apm.** { *; }
+-dontwarn com.cn21.ued.apm.**
+-keepattributes Exceptions, Signature, InnerClasses, LineNumberTable
+-keep class org.apache.http.impl.client.**
+-dontwarn org.apache.commons.**

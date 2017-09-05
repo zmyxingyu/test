@@ -1,7 +1,11 @@
 package com.cn21.onekit.lib.update;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
+
+import com.cn21.onekit.lib.utils.AndroidUtils;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -14,7 +18,19 @@ public class BaseManager {
 
     public Handler mHandler = new Handler(Looper.getMainLooper());
     private static Executor mTaskExcutor  = Executors.newFixedThreadPool(3);
+    private static String BASE_URL;
 
+    public static String getBaseUrl(Context context) {
+        if (TextUtils.isEmpty(BASE_URL)) {
+            String metaUrl = AndroidUtils.getApplicationMataValue(context, "resource_url");
+            setBaseUrl(metaUrl);
+        }
+        return BASE_URL;
+    }
+
+    public static void setBaseUrl(String baseUrl) {
+        BASE_URL = baseUrl;
+    }
 
     public interface ResponseListener<T>{
          void onCallBack(T t);
