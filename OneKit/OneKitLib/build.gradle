@@ -17,7 +17,7 @@ android {
             minifyEnabled Boolean.parseBoolean(PROGUARD_LIB_IN_RELEASE as String)
             proguardFiles '../proguard-android.txt', 'proguard-rules.pro'
             if (!download_mode) {
-                //Ç¶ÈëÄ£Ê½ĞèÔö¼Ó¶ÔÓ¦µÄ proguard ÎÄ¼ş
+                //åµŒå…¥æ¨¡å¼éœ€å¢åŠ å¯¹åº”çš„ proguard æ–‡ä»¶
                 System.out.println("-----> add embed proguard file in embed mode\n")
                 proguardFile 'proguard-xwalk-embed.txt'
             }
@@ -38,10 +38,10 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:25.3.0'
     if (Boolean.parseBoolean(ENABLE_DOWNLOAD_MODE as String)) {
-        //ÏÂÔØ»ò·ÖÏíÄ£Ê½µÄ¹¤³Ì¿â
+        //ä¸‹è½½æˆ–åˆ†äº«æ¨¡å¼çš„å·¥ç¨‹åº“
         compile project(':xwalk_shared_library')
     } else {
-        //Ç¶ÈëÄ£Ê½µÄaar
+        //åµŒå…¥æ¨¡å¼çš„aar
         compile(name: 'crosswalk-23.53.589.4', ext: 'aar')
     }
 
@@ -69,7 +69,7 @@ task javadoc(type: Javadoc) {
 //    ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
     destinationDir = file("../javadoc/")
     options.linkSource true
-    options.encoding = "UTF-8" //½â¾öÖĞÎÄ×Ö·ûGBK±àÂë±¨´íÎÊÌâ
+    options.encoding = "UTF-8" //è§£å†³ä¸­æ–‡å­—ç¬¦GBKç¼–ç æŠ¥é”™é—®é¢˜
     options.charSet = 'UTF-8'
     failOnError false
 }

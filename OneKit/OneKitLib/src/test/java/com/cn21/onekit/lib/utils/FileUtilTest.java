@@ -2,6 +2,7 @@ package com.cn21.onekit.lib.utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Map;
 
 import org.junit.Assert;
@@ -27,7 +28,6 @@ public class FileUtilTest {
         String sourceMd5Json = UpdateResourcesUtils.parseJsonObjectByName(str, "sdk_source_md5");
         Assert.assertNotNull(sourceMd5Json);
         System.out.println(sourceMd5Json);
-        //��֤��Դ����ÿ���ļ�
         Map<String, String> serviceFileMd5Map = UpdateResourcesUtils.parseFileMd5ToMap(sourceMd5Json);
 
         String unzipPath = "F:\\a_temp_work\\test\\unzip\\";
@@ -37,9 +37,9 @@ public class FileUtilTest {
 
     @Test
     public void testZipFileRead() {
-        String zip = "F:\\a_temp_work\\test\\zip\\h5.zip";
+        String zip = "F:\\a_temp_work\\test\\zip\\v2.14.zip";
         String unzip = "F:\\a_temp_work\\test\\unzip\\";
-        Assert.assertTrue(FileUtil.zipFileRead(zip, unzip));
+//        Assert.assertTrue(FileUtil.zipFileRead(zip, unzip));
     }
 
     @Test

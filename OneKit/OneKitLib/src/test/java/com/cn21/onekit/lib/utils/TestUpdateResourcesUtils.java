@@ -108,6 +108,12 @@ public class TestUpdateResourcesUtils {
         File f = UpdateResourcesUtils.createNewResourceFile(context,"v2");
         Assert.assertNotNull(f);
         System.out.println(f.getAbsolutePath());
+        File f1 = UpdateResourcesUtils.createNewResourceFile(context,"v2");
+        Assert.assertNotNull(f1);
+        System.out.println(f1.getAbsolutePath());
+        File f2 = UpdateResourcesUtils.createNewResourceFile(context,"v3");
+        Assert.assertNotNull(f2);
+        System.out.println(f2.getAbsolutePath());
     }
 
     @Test
